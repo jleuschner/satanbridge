@@ -1,0 +1,15 @@
+	<h1>Windows7-Arbeitsliste
+	<button class="pull-right btn btn-primary" ng-click="refresh()" title="Neu laden"><i class="fa fa-refresh"></i></button>
+	</h1>
+  <p>(Alle XP-Hosts mit Text im Datenbankfeld 'Benutzer')<span class="pull-right">Gesamt: {{countHosts}} / Austausch: {{countAustausch}} / PXE-Fehler: {{countPXE}}</span></p>
+		<div ng-repeat="dep in departments | orderBy: 'kst'" ng-if="dep.Assets.length" >
+		  <strong>{{dep.kst}} - {{dep.bereich}}</strong>
+		<table class="table table-stripped table-hover" >
+			<tr ng-repeat="asset in dep.Assets" >
+			  <td style="width: 80px">{{asset.hostname}}</td>
+        <td style="width: 30%">{{asset.standort}}</td><td class="text-info">{{asset.benutzer}}</td><td align="right">{{asset.typ}}</td>
+			</tr>
+		</table>
+		</div>
+
+

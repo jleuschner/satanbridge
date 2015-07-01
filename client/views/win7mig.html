@@ -1,0 +1,37 @@
+<div ng-controller="DepartmentCtrl">
+	<h1>Windows7-Migration nach Abteilungen
+	<button class="pull-right btn btn-primary" ng-click="refresh()" title="Neu laden"><i class="fa fa-refresh"></i></button>
+	</h1>
+	<p><span title="Produktive Netzwerk-PCs (Status 'ausgeliefert')">Hosts: {{countHosts}}</span>
+			: WindowsXP: {{countXP}} / Windows7: {{countW7}} / 
+		<span title="z.B. Windows8 oder Serverbetriebssysteme">Andere: {{countHosts - countXP - countW7}}</span>
+	</p>
+	<p class="pull-right"> ~ {{countW7/(countXP+countW7)*100 | number: 2}} %</p>
+	<progressbar class="progress-striped active" style="background-color: #d9534f" type="success" max="countW7+countXP" value="countW7"><span style="color:black; white-space:nowrap;">{{countW7}} / {{countW7+countXP}}</span></progressbar>
+	<!--
+	<progress>
+		<bar class="progress-striped active" type="success" value="{{countHosts/countW7*100}}"><span style="color:black; white-space:nowrap;">{{countW7}} / {{countHosts}}</span></bar>
+		<bar class="progress-striped active" type="danger" value="80"><span style="color:black; white-space:nowrap;">{{countXP}} / {{countHosts}}</span></bar>
+	</progress>
+	-->
+	<accordion>
+		<div ng-repeat="dep in departments | orderBy: 'kst'" ng-if="dep.Assets.length" >
+			<accordion-group  ng-class="{'panel-success': dep.winXP===0, 'panel-danger': dep.win7===0, 'panel-warning' : dep.win7!=0 && dep.winXP!=0}">
+			<accordion-heading>
+					<strong>{{dep.kst}} - {{dep.bereich}}</strong>
+				<p class="pull-right" style="margin-right: 5px"><small>Hosts: {{dep.Assets.length}} : WindowsXP: {{dep.winXP}} / Windows7: {{dep.win7}}</small></p>
+				<!--
+				<progressbar class="pull-right progress-striped active" style="background-color: #f2dede;clear: right" type="success" max="countW7+countXP" value="countW7"><span style="color:black; white-space:nowrap;">{{countW7}} / {{countW7+countXP}}</span></progressbar>
+				-->
+			</accordion-heading>
+			<table class="table table-stripped table-hover" >
+				<tr ng-repeat="asset in filteredassets =(dep.Assets | filter: { invOs :os})" ng-class="{'success': asset.invOs === 'Windows7', 'danger' : asset.invOs === 'WindowsXP'}">
+					<td >{{asset.hostname}}</td><td>{{asset.invOs}}</td><td>{{asset.standort}}</td><td class="text-info">{{asset.benutzer}}</td><td align="right">{{asset.typ}}</td>
+				</tr>
+			</table>
+		</accordion-group>
+		</div>
+	</accordion>
+
+
+</div>

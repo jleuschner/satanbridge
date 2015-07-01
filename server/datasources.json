@@ -1,0 +1,14 @@
+{
+  "db": {
+    "name": "db",
+    "connector": "memory"
+  },
+  "thorin": {
+    "host": "thorin.kl.kdo.int",
+    "database": "satan",
+    "password": "auenland",
+    "name": "thorin",
+    "connector": "mysql",
+    "user": "root"
+  }
+}

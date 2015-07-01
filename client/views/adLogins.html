@@ -1,0 +1,17 @@
+<h1>Logins nach PCs</h1>
+<form class="form-inline">
+<div class="form-inline form-group">
+	<div class="input-group">
+		<div class="input-group-addon">Hostname</div>
+		<input ng-model="hostname" class="form-control"></input>
+	</div>
+	<button type="submit" ng-click="search()" class="btn btn-primary">Suchen</button>
+</div>
+</form>
+<table class="table table-striped table-hover">
+	<tr ng-repeat="login in logins | orderBy: '-time'">
+		<td>{{login.time*1000 | date: 'dd.MM.yyyy HH:mm:ss'}}</td>
+		<td>{{login.hostname}}</td>
+		<td>{{login.username}}</td>
+	</tr>
+</table>

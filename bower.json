@@ -1,0 +1,26 @@
+{
+  "name": "satanbridge",
+  "version": "0.0.0",
+  "authors": [
+    "jleuschner <jens@marieswelt.com>"
+  ],
+  "description": "Bridging Satan in a RESTfull World",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "client/vendor",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.4.0",
+    "bootstrap": "~3.3.4",
+    "angular-animate": "~1.4.0",
+    "angular-resource": "~1.4.0",
+    "angular-bootstrap": "~0.13.0",
+    "font-awesome": "~4.3.0",
+    "angular-route": "~1.4.1"
+  }
+}
