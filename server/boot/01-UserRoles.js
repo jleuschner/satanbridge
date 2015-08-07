@@ -1,65 +1,64 @@
+var log = require('debug')('boot:01-UserRoles');
+// Enable log: 'set DEBUG=boot:01-UserRoles' or 'set DEBUG=boot:*'
+
 module.exports = function (app) {
 	var User = app.models.user;
 	var Role = app.models.Role;
 	var RoleMapping = app.models.RoleMapping;
-	/*
-	var Team = app.models.Team;
-	*/
 
-	var defaultUsers = [
-        {
-        	username: "admin",
-        	password: "admin",
-        	email: "admin@admin.local",
-        	firstName: "Admin",
-        	lastName: "Administrator"
-        }
-    ];
+	log("Default Users and Roles");
 
-	defaultUsers.forEach(function (user) {
-		User.findOrCreate({ where: { username: user.username} }, user,
-        function (err, createdUser, created) {
-        	if (err) {
-        		console.error('error creating default Users', err);
-        	}
-        	(created) ? console.log('created user', createdUser.username)
-                        : console.log('found user', createdUser.username);
-        });
-	});
+	var roles = [
+		{ name: 'SuperAdmin',
+			users: [{
+				username: "admin",
+				password: "admin",
+				email: "admin@admin.local",
+				firstName: "Admin",
+				lastName: "Administrator"
+			}]
+		}, {
+			name: 'UserAdmin',
+			users: [{
+				username: "admin"
+			}]
+		}
+	];
 
-	Role.findOrCreate({ where: { name: "SuperAdmin"} }, { name: "SuperAdmin" },
+	roles.forEach(function (role) {
+		Role.findOrCreate(
+			{ where: { name: role.name} },
+			{ name: role.name },
 			function (err, createdRole, created) {
 				if (err) {
-					console.error('error running findOrCreate(' + 'SuperAdmin' + ')', err);
+					console.error('error running findOrCreate(' + role.name + ')', err);
 				}
-				(created) ? console.log('created role', createdRole.name)
-									: console.log('found role', createdRole.name);
-				/*
-				createdRole.principals.create({
-					principalType: RoleMapping.USER,
-					principalId: 1
-				}, function (err, principal) {
-					if (err) throw err;
-					console.log('Created principal:', principal);
-				});
-				*/
-			});
+				(created) ? log('created Role ', createdRole.name)
+									: log('found Role ', createdRole.name);
+				role.users.forEach(function (roleUser) {
+					User.findOrCreate(
+						{ where: { username: roleUser.username} },
+						roleUser,
+						function (err, createdUser, created) {
+							if (err) {
+								console.error('error creating default Users', err);
+							}
+							(created) ? log('created user', createdUser.username)
+												: log('found user', createdUser.username);
 
-	RoleMapping.findOrCreate({ where: { 
-					principalType: RoleMapping.USER,
-					principalId: 1,
-					roleId: 1
-				} }, {
-					principalType: RoleMapping.USER,
-					principalId: 1,
-					roleId: 1
-				},
-			function (err, createdMapping, created) {
-				if (err) {
-					console.error('error running Mapping', err);
-				}
-				(created) ? console.log('created Mapping', createdMapping)
-									: console.log('found Mapping', createdMapping);
+							RoleMapping.findOrCreate(
+								{ where: {principalType: RoleMapping.USER, principalId: createdUser.id, roleId: createdRole.id }},
+								{principalType: RoleMapping.USER, principalId: createdUser.id, roleId: createdRole.id },
+								function (err, createdMapping, created) {
+									if (err) {
+										console.error('error running Mapping', err);
+									}
+									(created) ? log('created Mapping', createdMapping)
+														: log('found Mapping', createdMapping);
+								});
+						});
+				});
 			});
+	});
 
 };
