@@ -14,7 +14,12 @@
     ]
   },
   "User": {
-    "dataSource": "db"
+    "dataSource": "db",
+    "public": false
+  },
+  "user": {
+    "dataSource": "db",
+    "public": true
   },
   "AccessToken": {
     "dataSource": "db",
@@ -46,6 +51,10 @@
   },
   "Login": {
     "dataSource": "thorin",
+    "public": true
+  },
+  "UserGroup": {
+    "dataSource": "db",
     "public": true
   }
 }

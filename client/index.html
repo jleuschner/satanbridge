@@ -38,10 +38,19 @@
           </li>
 
           <li><a href="#ADLogins" ng-click="navCollapsed=true"><i class="fa fa-user"></i> User-Logins</a></li>
+
+          <li><a href="#UserGroups" ng-click="navCollapsed=true"><i class="fa fa-group"></i> UserGroups</a></li>
+
+          <li ng-show="!user.id"><a href="#/login" ><i class="fa fa-sign-in"></i> Anmelden</a></li>
+          <li ng-show="user.id"><a href="#/logout" ><i class="fa fa-sign-out"></i> Abmelden</a></li>
+
         </ul>
       </div>
     </div>
   </nav>
+	<div>
+		user: {{ user | json }}
+	</div>
 
 	<div class="container">
 		<div ng-view></div>
@@ -56,7 +65,29 @@
 	<script type="text/javascript" src="vendor/angular-animate/angular-animate.min.js"></script>
 	<script type="text/javascript" src="vendor/angular-loading-bar/build/loading-bar.min.js"></script>
 	<script type="text/javascript" src="js/main.js"></script>
+	<script type="text/javascript" src="js/sysUser.js"></script>
 	<script type="text/javascript" src="js/win7mig.js"></script>
 	<script type="text/javascript" src="js/adlogins.js"></script>
+
+	<script type="text/ng-template" id="login.html">
+		<div class="col-md-6 center-block">
+    <h1>Login</h1>
+    <form ng-submit="login()">
+    <input type="text" ng-model="username" class="form-control" value="admin" placeholder="Username" required ><br>
+    <input type="password" ng-model="password" class="form-control" value="admin" placeholder="Password" required ><br>
+		<p class="text-danger" ng-show="message">{{message}}</p>
+    <button type="submit" class="btn btn-primary">Login</button>
+    <button ng-click="logout()" class="btn btn-default">Logout</button>
+    </form>
+
+		</div>  
+	</script>
+	<script type="text/ng-template" id="logout.html">
+		<div class="col-md-6">
+
+    <h1>Abgemeldet...</h1>
+
+		</div>  
+	</script>
 	</body>
 </html>
