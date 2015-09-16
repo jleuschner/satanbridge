@@ -15,3 +15,8 @@ body {
   padding-top: 52px;
 }
 
+
+/* Fixes for maverix.css */
+.btn-primary {
+	background: -ms-linear-gradient(#D3F7FD, #87C5FB); /*IE10*/
+} 
