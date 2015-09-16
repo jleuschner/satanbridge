@@ -3,6 +3,8 @@
 
 	app.controller('sysUserCtrl', ['$scope', 'User', 'UserGroup', '$location', function ($scope, User, UserGroup, $location) {
 
+
+
 		$scope.UserGroups = [];
 		$scope.getUserGroups = function () {
 			User.find({},

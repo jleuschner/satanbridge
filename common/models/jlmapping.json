@@ -1,0 +1,24 @@
+{
+  "name": "jlmapping",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {},
+  "validations": [],
+  "relations": {
+    "jlpc": {
+      "type": "belongsTo",
+      "model": "jlpc",
+      "foreignKey": ""
+    },
+    "jlpq": {
+      "type": "belongsTo",
+      "model": "jlpq",
+      "foreignKey": ""
+    }
+  },
+  "acls": [],
+  "methods": []
+}

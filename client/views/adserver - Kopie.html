@@ -1,0 +1,70 @@
+<h1>AD Server-Management</h1>
+
+{{computerSelected}}
+
+<div class="row" ng-init="getComputersByFilter('{operatingsystemversion -notlike \'6.1*\' -and operatingsystemversion -notlike \'5.1*\' }', 'operatingsystem,IPv4Address')">
+	<div class="col-md-4" >
+	<div style="max-height: 800px;overflow: auto">
+		<ul class="list-group">
+			<li class="list-group-item" ng-repeat="computer in (computers | orderBy : 'Name')" ng-click="selectComputer(computer)" ng-class="{'list-group-item-info' :0}">
+				<strong>{{computer.Name}}</strong>
+				<br>
+				<small>{{computer.OperatingSystem}}</small>
+			</li>
+		</ul>
+	</div>
+	</div>
+
+	<div class="col-md-8">
+
+		<!-- DNS -->
+		<div class="panel panel-info toggle" ng-show="computer.Name && !DnsPending">
+			<div class="panel-heading">
+				<strong>DNS</strong>
+			</div>
+			<table class="table">
+				<tr ng-repeat="entry in dns">
+					<td>{{entry.Name}}</td>
+					<td><i class="fa fa-long-arrow-right"></i></td>
+					<td>{{entry.Address}}</td>
+				</tr>
+				<tr ng-repeat="entry in dns_rev">
+					<td>{{entry.Name}}</td>
+					<td><i class="fa fa-long-arrow-left"></i></td>
+					<td>{{entry.NameHost}}</td>
+				</tr>
+			</table>
+		</div>
+
+		<!-- Ping -->
+		<div class="panel panel-default toggle" ng-show="computer.Name && !DnsPending">
+			<div class="panel-body">
+				<div class="pull-left text-info" ng-show="pingPending">
+					<i class="fa fa-spinner fa-spin fa-lg"></i> Pinging {{computer.DNSHostName}}...
+				</div>
+				<div class="pull-left" ng-show="!online && !pingPending">
+					<i class="fa fa-bullseye fa-lg text-danger"></i> Offline
+				</div>
+				<div class="pull-left"  ng-show="online && !pingPending">
+					<i class="fa fa-bullseye fa-lg text-success"></i> Online
+				</div>
+				<button class="btn btn-default btn-xs pull-right" ng-click="ping(computer.Name)" ng-disabled="!computer.Name">Ping</button>
+			</div>
+		</div>
+
+		<!-- Updates -->
+		<div class="panel panel-info toggle" ng-show="online">
+			<div class="panel-heading">
+				<strong>Ausstehende Updates</strong>
+			</div>
+			<table class="table">
+				<tr ng-repeat="entry in missingUpdates">
+					<td><small>{{entry.Name}}</small></td>
+					<td style="white-space:nowrap">{{entry.BulletinID}}</td>
+				</tr>
+			</table>
+		</div>
+
+
+	</div>
+</div>

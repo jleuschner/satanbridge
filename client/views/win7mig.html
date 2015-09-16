@@ -16,12 +16,17 @@
 	-->
 	<accordion>
 		<div ng-repeat="dep in departments | orderBy: 'kst'" ng-if="dep.Assets.length" >
-			<accordion-group  ng-class="{'panel-success': dep.winXP===0, 'panel-danger': dep.win7===0, 'panel-warning' : dep.win7!=0 && dep.winXP!=0}">
+<!--
+			<accordion-group ng-class="{'panel-success': dep.winXP===0, 'panel-danger': dep.win7===0, 'panel-warning' : dep.win7!=0 && dep.winXP!=0}">
+-->
+			<accordion-group  ng-attr-panel-class="{{dep.depStatus}}" ng-class="{'panel-success': dep.winXP===0, 'panel-danger': dep.win7===0, 'panel-warning' : dep.win7!=0 && dep.winXP!=0}">
 			<accordion-heading>
-					<strong>{{dep.kst}} - {{dep.bereich}}</strong>
-				<p class="pull-right" style="margin-right: 5px"><small>Hosts: {{dep.Assets.length}} : WindowsXP: {{dep.winXP}} / Windows7: {{dep.win7}}</small></p>
-				<!--
-				<progressbar class="pull-right progress-striped active" style="background-color: #f2dede;clear: right" type="success" max="countW7+countXP" value="countW7"><span style="color:black; white-space:nowrap;">{{countW7}} / {{countW7+countXP}}</span></progressbar>
+				<strong>{{dep.kst}} - {{dep.bereich}}</strong>
+				<span class="pull-right">
+				<small>Hosts: {{dep.Assets.length}} : WindowsXP: {{dep.winXP}} / Windows7: {{dep.win7}}</small>
+				</span>
+					<!--
+					<progressbar class="progress-striped active" style="background-color: #f2dede;" type="success" max="dep.Assets.length" value="dep.win7"><span style="color:black; white-space:nowrap;">{{dep.win7}} / {{dep.Assets.length}}</span></progressbar>
 				-->
 			</accordion-heading>
 			<table class="table table-stripped table-hover" >

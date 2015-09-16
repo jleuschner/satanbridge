@@ -31,11 +31,11 @@
   },
   "RoleMapping": {
     "dataSource": "db",
-    "public": false
+    "public": true
   },
   "Role": {
     "dataSource": "db",
-    "public": false
+    "public": true
   },
   "Department": {
     "dataSource": "thorin",
@@ -55,6 +55,34 @@
   },
   "UserGroup": {
     "dataSource": "db",
+    "public": true
+  },
+  "UserGroupMapping": {
+    "dataSource": "db",
+    "public": true
+  },
+  "jlpc": {
+    "dataSource": "db",
+    "public": true
+  },
+  "jlpq": {
+    "dataSource": "db",
+    "public": true
+  },
+  "jlmapping": {
+    "dataSource": "db",
+    "public": false
+  },
+  "pc": {
+    "dataSource": "thorin",
+    "public": true
+  },
+  "ADUser": {
+    "dataSource": null,
+    "public": true
+  },
+  "ADComputer": {
+    "dataSource": null,
     "public": true
   }
 }

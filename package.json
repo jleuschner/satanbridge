@@ -9,11 +9,14 @@
     "compression": "^1.0.3",
     "cors": "^2.5.2",
     "debug": "^2.2.0",
+    "edge": "^0.10.1",
+    "edge-ps": "0.1.0-pre",
     "errorhandler": "^1.1.1",
     "loopback": "^2.14.0",
     "loopback-boot": "^2.6.5",
     "loopback-connector-mysql": "^2.1.1",
     "loopback-datasource-juggler": "^2.19.0",
+    "request": "^2.61.0",
     "serve-favicon": "^2.0.1"
   },
   "optionalDependencies": {

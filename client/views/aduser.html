@@ -1,0 +1,36 @@
+<h1>ADUser-Management</h1>
+
+<div class="row">
+
+	<div class="col-md-4">
+		<div class="form-group" ng-class="{'has-error' : noResults}">
+			<input type="text" ng-model="Userselected" typeahead="user.Name for user in getUsers($viewValue)" 
+				typeahead-editable="false" typeahead-no-results="noResults" typeahead-loading="loadingPC" typeahead-min-length="3" typeahead-wait-ms=300 
+				typeahead-on-select="selectPC($item,$model,$label)"
+				class="form-control" autofocus>
+			<i ng-show="loadingPC" class="glyphicon glyphicon-refresh"></i>
+			<div ng-show="noResults">
+				<i class="glyphicon glyphicon-remove"></i> Kein User gefunden!
+			</div>
+		</div>
+	</div>
+
+
+	<div class="col-md-8">
+		<table class="table table-condensed">
+			<tr ng-repeat="(k,v) in user">
+				<th>{{k}}</th><td>{{v}}</td>
+			</tr>
+		</table>
+
+
+
+		<ul  class="list-group">
+			<li ng-repeat="user in users" class="list-group-item" ng-click="pcSel(this)">
+				<h4 class="list-group-item-heading">{{user.Name}}</h4>
+			</li>
+		</ul>
+	
+	</div>
+</div>
+

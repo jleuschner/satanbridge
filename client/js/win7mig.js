@@ -4,6 +4,7 @@
 
 	app.controller('DepartmentCtrl', ['$scope', 'Department', function ($scope, Department) {
 
+
 		$scope.refresh = function () {
 			$scope.countHosts = 0;
 			$scope.countXP = 0;
@@ -21,6 +22,9 @@
 						if (list[i].Assets[j].invOs.indexOf("Windows XP") > -1) { list[i].winXP++; gesamtXP++; list[i].Assets[j].invOs = "WindowsXP" }
 						if (list[i].Assets[j].invOs.indexOf("Windows 7") > -1) { list[i].win7++; gesamtW7++; list[i].Assets[j].invOs = "Windows7" }
 					}
+					if (list[i].winXP===0) list[i].depStatus = "panel-success";
+					if (list[i].win7===0) list[i].depStatus = "panel-danger";
+					if (list[i].win7!=0 && list[i].winXP!=0) list[i].depStatus = "panel-warning";
 				}
 				$scope.departments = list;
 				$scope.countHosts = gesamt;
@@ -49,7 +53,7 @@
 					for (j = 0; j < list[i].Assets.length; j++) {
 						gesamt++;
 						if (list[i].Assets[j].benutzer.indexOf("Austausch") > -1) { list[i].Austausch++; gesamtAustausch++; }
-						if (list[i].Assets[j].benutzer.indexOf("PXE") > -1) { list[i].PXE++; gesamtPXE++;  }
+						if (list[i].Assets[j].benutzer.indexOf("PXE") > -1) { list[i].PXE++; gesamtPXE++; }
 					}
 				}
 				$scope.departments = list;

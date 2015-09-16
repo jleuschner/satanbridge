@@ -5,9 +5,14 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" /> 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="stylesheet" type="text/css" href="vendor/bootstrap/dist/css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="css/maverix.css">
+		<link rel="stylesheet" type="text/css" href="vendor/bootstrap/dist/css/bootstrap-theme.min.css">
+<!--
+-->
 		<link rel="stylesheet" type="text/css" href="css/navbar.css">
 		<link rel="stylesheet" type="text/css" href="vendor/font-awesome/css/font-awesome.min.css">
 		<link rel="stylesheet" type="text/css" href="vendor/angular-loading-bar/build/loading-bar.min.css">
+	<link rel="stylesheet" type="text/css" href="vendor/ngAnimate/css/ng-animation.css">
 		<title>Jens Sandkasten</title>
 		<base href="/">
 	</head>
@@ -48,10 +53,11 @@
       </div>
     </div>
   </nav>
+<!--
 	<div>
 		user: {{ user | json }}
 	</div>
-
+-->
 	<div class="container">
 		<div ng-view></div>
 	</div>
@@ -68,6 +74,11 @@
 	<script type="text/javascript" src="js/sysUser.js"></script>
 	<script type="text/javascript" src="js/win7mig.js"></script>
 	<script type="text/javascript" src="js/adlogins.js"></script>
+	<script type="text/javascript" src="js/printqueues.js"></script>
+	<script type="text/javascript" src="js/pcmgmt.js"></script>
+	<script type="text/javascript" src="js/aduser.js"></script>
+	<script type="text/javascript" src="js/adcomputer.js"></script>
+	<script type="text/javascript" src="js/tiles.js"></script>
 
 	<script type="text/ng-template" id="login.html">
 		<div class="col-md-6 center-block">

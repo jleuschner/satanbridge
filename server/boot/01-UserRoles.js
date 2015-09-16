@@ -6,6 +6,14 @@ module.exports = function (app) {
 	var Role = app.models.Role;
 	var RoleMapping = app.models.RoleMapping;
 
+	var UserGroup = app.models.UserGroup;
+
+	UserGroup.findOrCreate(
+		{ where: { name: "Gruppe1"} },
+		{ name: "Gruppe1" }
+	);
+
+
 	log("Default Users and Roles");
 
 	var roles = [
@@ -47,8 +55,8 @@ module.exports = function (app) {
 												: log('found user', createdUser.username);
 
 							RoleMapping.findOrCreate(
-								{ where: {principalType: RoleMapping.USER, principalId: createdUser.id, roleId: createdRole.id }},
-								{principalType: RoleMapping.USER, principalId: createdUser.id, roleId: createdRole.id },
+								{ where: { principalType: RoleMapping.USER, principalId: createdUser.id, roleId: createdRole.id} },
+								{ principalType: RoleMapping.USER, principalId: createdUser.id, roleId: createdRole.id },
 								function (err, createdMapping, created) {
 									if (err) {
 										console.error('error running Mapping', err);

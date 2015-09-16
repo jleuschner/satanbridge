@@ -1,0 +1,26 @@
+{
+  "name": "jlpq",
+  "plural": "jlpqs",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "name": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {
+    "jlpcs": {
+      "type": "hasMany",
+      "model": "jlpc",
+      "foreignKey": "",
+      "through": "jlmapping"
+    }
+  },
+  "acls": [],
+  "methods": []
+}

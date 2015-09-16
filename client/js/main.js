@@ -1,6 +1,6 @@
 var mainApp = angular.module('mainApp', [
 			'ngRoute','lbServices', 'ui.bootstrap', 'ngAnimate', 'angular-loading-bar', 
-			'win7mig', 'adlogins','sysUser'
+			'win7mig', 'adlogins','sysUser', 'printqueues', 'pcmgmt', 'aduser', 'adcomputer', 'tiles'
 			]);
 
 
@@ -9,6 +9,10 @@ mainApp.config(function ($routeProvider, $locationProvider, $httpProvider) {
 		.when('/', {
 			templateUrl: 'views/home.html'
 			//controller: 'mainCtrl'
+		})
+		.when('/tiles', {
+			templateUrl: 'views/tiles.html',
+			controller: 'tilesCtrl'
 		})
 		.when('/login', {
 			templateUrl: 'login.html',
@@ -30,10 +34,32 @@ mainApp.config(function ($routeProvider, $locationProvider, $httpProvider) {
 			templateUrl: 'views/win7worklist.html',
 			controller: 'win7WorklistCtrl'
 		})
+		.when('/printqueues', {
+			templateUrl: 'views/printqueues.html',
+			controller: 'printqueueCtrl'
+		})
+		.when('/pc', {
+			templateUrl: 'views/pcmgmt.html',
+			controller: 'pcmgmtCtrl'
+		})
+		.when('/aduser', {
+			templateUrl: 'views/aduser.html',
+			controller: 'aduserCtrl'
+		})
+		.when('/adcomputer/:computer?', {
+			templateUrl: 'views/adcomputer.html',
+			controller: 'adcomputerCtrl'
+		})
+		.when('/server/:computer?', {
+			templateUrl: 'views/adserver.html',
+			controller: 'adcomputerCtrl'
+		})
 		.when('/ADLogins', {
 			templateUrl: 'views/adLogins.html',
 			controller: 'loginCtrl'
 		});
+
+
 
 	$httpProvider.interceptors.push(function ($q, $location, LoopBackAuth) {
 		return {
@@ -54,6 +80,7 @@ mainApp.config(function ($routeProvider, $locationProvider, $httpProvider) {
 	//$locationProvider.html5Mode(true);
 
 })
+
 
 mainApp.controller('loginCtrl', ['$scope', 'User', '$location', function ($scope, User, $location) {
 
@@ -84,7 +111,7 @@ mainApp.controller('mainCtrl', ['$scope', '$location', 'User', function ($scope,
 	$scope.getUser = function () {
 		if (User.isAuthenticated()) {
 			User.getCurrent(function (user) {
-				//console.log(user.toJSON());
+				console.log(user.toJSON());
 				$scope.user = user.toJSON();
 			});
 		}

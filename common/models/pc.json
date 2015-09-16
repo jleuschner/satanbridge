@@ -1,0 +1,14 @@
+{
+  "name": "pc",
+  "plural": "pcs",
+  "base": "Asset",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {},
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": []
+}

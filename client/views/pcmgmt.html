@@ -1,0 +1,40 @@
+<h1>PC-Management</h1>
+
+<div class="row">
+	<div class="col-md-4">
+
+		<div class="form-group" ng-class="{'has-error' : noResults}">
+			<input type="text" ng-model="PCselected" typeahead="pc.hostname for pc in getPC($viewValue)" 
+				typeahead-editable="false" typeahead-no-results="noResults" typeahead-loading="loadingPC"
+				typeahead-on-select="selectPC($item,$model,$label)"
+				class="form-control" autofocus>
+			<i ng-show="loadingPC" class="glyphicon glyphicon-refresh"></i>
+			<div ng-show="noResults">
+				<i class="glyphicon glyphicon-remove"></i> Kein PC gefunden!
+			</div>
+		</div>
+	</div>
+	<div class="col-md-8">
+		<table class="table table-condensed">
+			<tr ng-repeat="(k,v) in pc">
+				<th>{{k}}</th><td>{{v}}</td>
+			</tr>
+		</table>
+
+
+
+
+<!--
+		<ul ng-controller="pcCtrl" class="list-group">
+			<li ng-repeat="pc in pcs" class="list-group-item" ng-click="pcSel(this)">
+				<h4 class="list-group-item-heading">{{pc.hostname}}</h4>
+				<p class="list-group-item-text">{{pc.standort}}</p>
+			</li>
+		</ul>
+-->
+	
+	</div>
+</div>
+
+
+

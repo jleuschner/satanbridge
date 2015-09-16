@@ -7,14 +7,21 @@
   },
   "properties": {},
   "validations": [],
-  "relations": {},
+  "relations": {
+    "UserGroups": {
+      "type": "hasMany",
+      "model": "UserGroup",
+      "foreignKey": "",
+      "through": "UserGroupMapping"
+    }
+  },
   "acls": [
-	  {
-      "principalType": "ROLE",
-      "principalId": "SuperAdmin",
+    {
       "accessType": "READ",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
       "permission": "ALLOW"
     }
-	],
+  ],
   "methods": []
 }
