@@ -7,51 +7,36 @@
 		$scope.computerList = [];
 		/* $scope.computerList -> Ergebnissatz generiert durch getComputersByFilter :
 		computerList = [{
-		computer				: AdObject,
+		computer				: {} AdObject,
 		online					: Ping-Ergebnis (-1 unknown, 0 offline, 1 online)
 		onlinePending		: Ping aktiv?
-		updates					: fehlende Updates
+		dns							: [] Forward-nslookup
+		dns_rev					: [] Reverse-nslookup
+		dnsPending			: nslookup aktiv ?
+		updateCount			: Anzahl fehlender Updates (-1 unknown)
+		updates					: [] fehlende Updates
 		updatesPending	: Updateabfrage aktiv ?
 		},
 		{..}]
 		*/
 
-		$scope.computer = {};
-		$scope.pingPending = false;
-		$scope.online = false;
-
-		$scope.dns = [];
-		$scope.dns_rev = [];
-		$scope.DnsPending = false;
-
-		$scope.missingupdates = [];
+		$scope.objSelected = {};
 
 
 		// Aufruf per /:computer
 		if ($routeParams.computer) {
-			$scope.computerSelected = $routeParams.computer;
-			AdComputer.findById({ id: $routeParams.computer, properties: "IPv4Address" })
+			AdComputer.findById({ id: $routeParams.computer, properties: "OperatingSystem,IPv4Address" })
 				.$promise
 				.then(function (result) {
 					if (result.Name) {
-						$scope.computerSelected = result.Name;
-						$scope.selectComputer(result);
+						$scope.selectComputer({ computer: result });
 					} else {
 						$scope.noResults = true;
 					}
 				});
 		}
-		// ----------------
 
-		$scope.selectComputer = function ($item, $model, $label) {
-			$scope.computer = $item;
-			$scope.dns = [];
-			$scope.nslookup($scope.computer.Name, function (result) { $scope.dns = result });
-			$scope.dns_rev = [];
-			$scope.nslookup($scope.computer.IPv4Address, function (result) { $scope.dns_rev = result });
-
-			$scope.ping($scope.computer.Name);
-		}
+		//-------------------
 
 		$scope.getComputers = function (val) {
 			return AdComputer.find({
@@ -61,15 +46,22 @@
 			.$promise
 			.then(
 				function (list) {
-					//$scope.users = list;
-					//console.log(list);
-					return list;
+					var returnList = [];
+					list.forEach(function (obj) {
+						returnList.push({
+							computer: obj,
+							online: -1,
+							onlinePending: false,
+							updateCount: -1,
+							updatesPending: false
+						});
+					});
+					return returnList;
 				},
 			function (err) {
 				console.log("ERRRR: ", err);
 			})
 		};
-
 
 		//-------------------
 		$scope.getComputersByFilter = function (filter, properties) {
@@ -86,99 +78,116 @@
 						//console.log(i++, obj.Name);
 						$scope.computerList.push({
 							computer: obj,
-							online: 0,
+							online: -1,
 							onlinePending: false,
-							updates: -1,
+							updateCount: -1,
 							updatesPending: false
 						});
 					})
+
+
 					pingList(function (obj) {
-						getUpdatesList(obj);
+						getUpdateCount(obj);
 					});
-					//getUpdatesList($scope.computerList[28]);
-					//getUpdatesList($scope.computerList[50]);
-					//getUpdatesList($scope.computerList[31]);
-					//console.log(list)
+
 				},
 				function (err) {
 					console.log(err);
 				})
 		};
 
+		// ----------------
+
+		$scope.selectComputer = function ($item, $model, $label) {
+			$scope.objSelected = $item;
+			$scope.nslookup($item);
+			$scope.ping($item, function (online) {
+				if (online) {
+					$scope.getUpdates($item);
+				}
+			})
+		}
+
+		// ----------------
+
 		var pingList = function (cbEach) {
 			$scope.computerList.forEach(function (obj) {
-				obj.online = -1;
-				obj.onlinePending = true;
-				AdComputer.ping({ 'id': obj.computer.DNSHostName })
-					.$promise
-					.then(function (result) {
-						obj.onlinePending = false;
-						obj.online = result.ping;
-						if (obj.online && cbEach) cbEach(obj);
-					});
+				$scope.ping(obj, function (online) {
+					if (obj.online && cbEach) cbEach(obj);
+				});
 			});
 		}
 
-		var getUpdatesList = function (obj) {
-			if (obj.computer.OperatingSystem.indexOf("200")>0 || obj.computer.OperatingSystem.indexOf("200")>0) {
+		$scope.ping = function (obj, cb) {
+			obj.onlinePending = true;
+			obj.online = -1
+			AdComputer.ping({ 'id': obj.computer.Name })
+				.$promise
+				.then(function (result) {
+					obj.onlinePending = false;
+					obj.online = result.ping;
+					if (cb) cb(result.ping);
+				});
+		}
+
+		$scope.nslookup = function (obj, cb) {
+			obj.dnsPending = true;
+			AdComputer.nslookup({ 'id': obj.computer.Name })
+				.$promise
+				.then(function (result) {
+					obj.dns = result;
+					if (obj.computer.IPv4Address) { //reverse Lookup
+						AdComputer.nslookup({ 'id': obj.computer.IPv4Address })
+							.$promise
+							.then(function (result) {
+								obj.dns_rev = result;
+								obj.dnsPending = false;
+								if (cb) cb(result);
+							});
+					} else {  // nur forward
+						obj.dnsPending = false;
+						if (cb) cb(result);
+					}
+				});
+		}
+
+		var getUpdateCount = function (obj) {
+			if (obj.computer.OperatingSystem.indexOf("200") > 0 || obj.computer.OperatingSystem.indexOf("200") > 0) {
 				return;
 			}
 			obj.updatesPending = true;
-			obj.updates = -1;
+			obj.updateCount = -1;
 			AdComputer.updatescount({ 'id': obj.computer.Name })
 				.$promise
 				.then(function (result) {
 					obj.updatesPending = false;
 					if (!result.error) {
-						obj.updates = result.updates;
+						obj.updateCount = result.updates;
 					} else {
-						obj.updates = -1;
+						obj.updateCount = -1;
 					}
 				});
 		}
 
-		//---------------
-
-		$scope.ping = function (computername) {
-			$scope.online = false;
-			$scope.pingPending = true;
-			AdComputer.ping({ 'id': computername })
+		$scope.getUpdates = function (obj, cb) {
+			obj.updatesPending = true;
+			obj.updateCount = -1;
+			obj.updates = [];
+			AdComputer.updates({ 'id': obj.computer.Name })
 				.$promise
 				.then(function (result) {
-					$scope.pingPending = false;
-					$scope.online = result.ping;
-					if ($scope.online) {
-						$scope.getUpdates(computername);
-					}
-				});
-		}
-
-		$scope.nslookup = function (name, cb) {
-			$scope.DnsPending = true;
-			AdComputer.nslookup({ 'id': name })
-				.$promise
-				.then(function (result) {
-					$scope.DnsPending = false;
-					cb(result);
-				});
-		}
-
-		$scope.getUpdates = function (name, cb) {
-			$scope.missingUpdates = [];
-			AdComputer.updates({ 'id': name })
-				.$promise
-				.then(function (result) {
+					obj.updatesPending = false;
 					if (!result.error) {
+						obj.updateCount = result.updates.length;
 						if (result.updates.length) {
-							$scope.missingUpdates = result.updates;
+							obj.updates = result.updates;
 						} else {
-							$scope.missingUpdates = Array({ Name: "Keine ausstehenden Updates" });
+							obj.updates = Array({ Name: "Keine ausstehenden Updates" });
 						}
 					} else {
-						$scope.missingUpdates = Array({ Name: "Abfragefehler! Kein SCCM-Client?" });
+						obj.updates = Array({ Name: "Abfragefehler! Kein SCCM-Client?" });
 					}
-					//$scope.DnsPending = false;
-					//cb(result);
+					if (cb) cb(result);
 				});
 		}
 

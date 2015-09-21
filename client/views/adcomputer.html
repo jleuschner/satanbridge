@@ -1,10 +1,12 @@
+<div class="container">
+
 <h1>ADComputer-Management</h1>
 
 <div class="row">
 
 	<div class="col-md-6">
 		<div class="form-group" ng-class="{'has-error' : noResults}">
-			<input id="computerSelector" type ="text" ng-model="computer.Name" typeahead="user.Name for user in getComputers($viewValue)" 
+			<input id="computerSelector" type ="text" ng-model="objSelected.computer.Name" typeahead="obj.computer.Name for obj in getComputers($viewValue)" 
 				typeahead-editable="false" typeahead-no-results="noResults" typeahead-loading="loadingPC" typeahead-min-length="3" typeahead-wait-ms=100 
 				typeahead-on-select="selectComputer($item,$model,$label)" typeahead-select-on-blur="true" typeahead-select-on-exact="true"
 				class="form-control" autofocus>
@@ -15,17 +17,17 @@
 		</div>
 
 		<input type="range">
-		<div class="panel panel-info" ng-show="computer.Name" ng-class="'flip-in'">
+		<div class="panel panel-info" ng-show="objSelected.computer.Name" ng-class="'flip-in'">
 			<div class="panel-heading">
 				<strong>DNS</strong>
 			</div>
 			<table class="table">
-				<tr ng-repeat="entry in dns">
+				<tr ng-repeat="entry in objSelected.dns">
 					<td>{{entry.Name}}</td>
 					<td><i class="fa fa-long-arrow-right"></i></td>
 					<td>{{entry.Address}}</td>
 				</tr>
-				<tr ng-repeat="entry in dns_rev">
+				<tr ng-repeat="entry in objSelected.dns_rev">
 					<td>{{entry.Name}}</td>
 					<td><i class="fa fa-long-arrow-left"></i></td>
 					<td>{{entry.NameHost}}</td>
@@ -34,18 +36,18 @@
 		</div>
 	
 		<!-- Ping -->
-		<div class="panel panel-default" ng-show="computer.Name">
+		<div class="panel panel-default" ng-show="objSelected.computer.Name">
 			<div class="panel-body">
-				<div class="pull-left text-info" ng-show="pingPending">
-					<i class="fa fa-spinner fa-spin fa-lg"></i> Pinging {{computer.DNSHostName}}...
+				<div class="pull-left text-info" ng-show="objSelected.onlinePending">
+					<i class="fa fa-spinner fa-spin fa-lg"></i> Pinging {{objSelected.computer.DNSHostName}}...
 				</div>
-				<div class="pull-left" ng-show="!online && !pingPending">
+				<div class="pull-left" ng-show="!objSelected.online && !objSelected.onlinePending">
 					<i class="fa fa-bullseye fa-lg text-danger"></i> Offline
 				</div>
-				<div class="pull-left"  ng-show="online && !pingPending">
+				<div class="pull-left"  ng-show="objSelected.online && !objSelected.onlinePending">
 					<i class="fa fa-bullseye fa-lg text-success"></i> Online
 				</div>
-				<button class="btn btn-default btn-xs pull-right" ng-click="ping(computer.Name)" ng-disabled="!computer.Name">Ping</button>
+				<button class="btn btn-default btn-xs pull-right" ng-click="ping(objSelected)" ng-disabled="!objSelected.computer.Name">Ping</button>
 			</div>
 		</div>
 
@@ -53,7 +55,7 @@
 
 	<div class="col-md-6">
 		<table class="table table-condensed">
-			<tr ng-repeat="(k,v) in computer">
+			<tr ng-repeat="(k,v) in objSelected.computer">
 				<th>{{k}}</th><td>{{v}}</td>
 			</tr>
 		</table>
@@ -69,3 +71,4 @@
 	</div>
 </div>
 
+</div>

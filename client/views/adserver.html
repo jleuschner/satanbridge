@@ -1,13 +1,14 @@
+<div ng-class="objSelected.computer.Name ? 'container-fluid' : 'container'">
 <h1>AD-Server</h1>
 
 <!--
 <div class="row" ng-init="getComputersByFilter('{operatingsystemversion -notlike \'6.1*\' -and operatingsystemversion -notlike \'5.1*\' }', 'operatingsystem,IPv4Address')">
 -->
 <div class="row" ng-init="getComputersByFilter('{operatingsystem -like \'*server*\' }', 'operatingsystem,IPv4Address')">
-	<div class="col-md-6" >
+	<div class="col-md-5" >
 	<div style="max-height: 800px;overflow: auto">
 		<ul class="list-group">
-			<li class="list-group-item" ng-repeat="obj in (computerList | orderBy : 'computer.Name')" ng-click="selectComputer(obj.computer)" ng-class="{'list-group-item-info' : 0}">
+			<li class="list-group-item" ng-repeat="obj in (computerList | orderBy : 'computer.Name')" ng-click="selectComputer(obj)" ng-class="{'list-group-item-info' : obj.computer.Name == objSelected.computer.Name}">
 				<table style="width: 100%;"><tr>
 					<td style="width:50%;">
 						<strong>{{obj.computer.Name}}</strong>
@@ -15,8 +16,9 @@
 						<small>{{obj.computer.OperatingSystem}}</small>
 					</td>
 					<td style="width:25%;">
+					<span ng-show="obj.online>-1 || obj.onlinePending">
 						<div class="text-info" ng-show="obj.onlinePending">
-							<i class="fa fa-spinner fa-spin fa-lg"></i> <small>Pinging {{obj.computer.DNSHostName}}...</small>
+							<i class="fa fa-spinner fa-spin fa-lg"></i> <small>Pinging...</small>
 						</div>
 						<div ng-show="!obj.online && !obj.onlinePending">
 							<i class="fa fa-bullseye fa-lg text-danger"></i> <small>Offline</small>
@@ -24,19 +26,20 @@
 						<div ng-show="obj.online && !obj.onlinePending">
 							<i class="fa fa-bullseye fa-lg text-success"></i> <small>Online</small>
 						</div>
+					</span>
 					</td>
 					<td style="width:25%;">
 						<div ng-show="obj.online>0">
 						<div class="text-info" ng-show="obj.updatesPending">
 							<i class="fa fa-spinner fa-spin fa-lg"></i> <small>Checking Updates...</small>
 						</div>
-						<div ng-show="obj.updates>0 && !obj.updatesPending">
-							<i class="fa fa-windows fa-lg text-danger"></i> <small>{{obj.updates}} Updates!</small>
+						<div ng-show="obj.updateCount>0 && !obj.updatesPending">
+							<i class="fa fa-windows fa-lg text-danger"></i> <small>{{obj.updateCount}} Updates!</small>
 						</div>
-						<div ng-show="obj.updates==0 && !obj.updatesPending">
+						<div ng-show="obj.updateCount==0 && !obj.updatesPending">
 							<i class="fa fa-windows fa-lg text-success"></i> <small>up to date!</small>
 						</div>
-						<div ng-show="obj.updates<0 && !obj.updatesPending">
+						<div ng-show="obj.updateCount<0 && !obj.updatesPending">
 							<i class="fa fa-windows fa-lg text-warning"></i> <small>Updates?</small>
 						</div>
 						</div>
@@ -47,20 +50,40 @@
 	</div>
 	</div>
 
-	<div class="col-md-6">
+	<div class="col-md-7">
+
+		<!-- AD-Object-->
+		<div class="panel panel-info toggle" ng-show="objSelected.computer.Name">
+			<div class="panel-heading">
+				<strong>AD-Object</strong>
+			</div>
+			<table class="table">
+				<tr><th>DistinguishedName</th><td><td><small>{{objSelected.computer.DistinguishedName}}</small></td></tr>
+				<tr><th>ObjectGUID</th><td><td>{{objSelected.computer.ObjectGUID}}</td></tr>
+				<tr><th>OperatingSystem</th><td><td>{{objSelected.computer.OperatingSystem}}</td></tr>
+				<tr><th>Enabled</th><td><td>{{objSelected.computer.Enabled}}</td></tr>
+				<!--
+				<tr ng-repeat="(k,v) in objSelected.computer">
+					<td>{{k}}</td>
+					<td><i class="fa fa-long-arrow-right"></i></td>
+					<td>{{v}}</td>
+				</tr>
+				-->
+			</table>
+		</div>
 
 		<!-- DNS -->
-		<div class="panel panel-info toggle" ng-show="computer.Name && !DnsPending">
+		<div class="panel panel-info toggle" ng-show="objSelected.computer.Name && !objSelected.dnsPending">
 			<div class="panel-heading">
 				<strong>DNS</strong>
 			</div>
 			<table class="table">
-				<tr ng-repeat="entry in dns">
+				<tr ng-repeat="entry in objSelected.dns">
 					<td>{{entry.Name}}</td>
 					<td><i class="fa fa-long-arrow-right"></i></td>
 					<td>{{entry.Address}}</td>
 				</tr>
-				<tr ng-repeat="entry in dns_rev">
+				<tr ng-repeat="entry in objSelected.dns_rev">
 					<td>{{entry.Name}}</td>
 					<td><i class="fa fa-long-arrow-left"></i></td>
 					<td>{{entry.NameHost}}</td>
@@ -69,28 +92,30 @@
 		</div>
 
 		<!-- Ping -->
-		<div class="panel panel-default toggle" ng-show="computer.Name && !DnsPending">
+		<div class="panel panel-default toggle" ng-show="objSelected.computer.Name && !objSelected.dnsPending">
 			<div class="panel-body">
-				<div class="pull-left text-info" ng-show="pingPending">
-					<i class="fa fa-spinner fa-spin fa-lg"></i> Pinging {{computer.DNSHostName}}...
+				<div class="pull-left text-info" ng-show="objSelected.onlinePending">
+					<i class="fa fa-spinner fa-spin fa-lg"></i> Pinging {{objSelected.computer.DNSHostName}}...
 				</div>
-				<div class="pull-left" ng-show="!online && !pingPending">
+				<div class="pull-left" ng-show="!objSelected.online && !objSelected.onlinePending">
 					<i class="fa fa-bullseye fa-lg text-danger"></i> Offline
 				</div>
-				<div class="pull-left"  ng-show="online && !pingPending">
+				<div class="pull-left"  ng-show="objSelected.online && !objSelected.onlinePending">
 					<i class="fa fa-bullseye fa-lg text-success"></i> Online
 				</div>
-				<button class="btn btn-primary btn-xs pull-right" ng-click="ping(computer.Name)" ng-disabled="!computer.Name">Ping</button>
+				<button class="btn btn-primary btn-xs pull-right" ng-click="ping(objSelected)" ng-disabled="!objSelected.computer.Name">Ping</button>
 			</div>
 		</div>
 
 		<!-- Updates -->
-		<div class="panel panel-info toggle" ng-show="online">
+		<div class="panel panel-info toggle" ng-show="objSelected.online>0">
 			<div class="panel-heading">
 				<strong>Ausstehende Updates</strong>
+				<span class="pull-right" ng-show="objSelected.updatesPending"><i class="fa fa-spinner fa-spin fa-lg"></i></span>
 			</div>
+			<div class="panel-body" ng-show="objSelected.updatesPending">Checking Microsoft-Updates...</div>
 			<table class="table">
-				<tr ng-repeat="entry in missingUpdates">
+				<tr ng-repeat="entry in objSelected.updates">
 					<td><small>{{entry.Name}}</small></td>
 					<td style="white-space:nowrap">{{entry.BulletinID}}</td>
 				</tr>
@@ -99,4 +124,5 @@
 
 
 	</div>
+</div>
 </div>
