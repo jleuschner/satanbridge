@@ -22,7 +22,6 @@
 
 		$scope.objSelected = {};
 
-
 		// Aufruf per /:computer
 		if ($routeParams.computer) {
 			AdComputer.findById({ id: $routeParams.computer, properties: "OperatingSystem,IPv4Address" })
@@ -36,7 +35,25 @@
 				});
 		}
 
-		//-------------------
+		$scope.getList = function (filterTxt) {
+			if (filterTxt && filterTxt.length > 0) {
+				$scope.getComputersByFilter('{operatingsystem -like \'*server*\' -and (Name -like \'*' + filterTxt+ '*\' -or OperatingSystem -like \'*' + filterTxt + '*\') }', 'operatingsystem,IPv4Address')
+			} else {
+				$scope.getComputersByFilter('{operatingsystem -like \'*server*\' }', 'operatingsystem,IPv4Address')
+			}
+		}
+
+		$scope.checkList = function () {
+			$scope.computerList.forEach(function (obj) {
+				$scope.ping(obj, function (online) {
+					if (obj.online) getUpdateCount(obj);
+				});
+			});
+		}
+
+
+		//-----------------------
+		// TypeAhead-Function
 
 		$scope.getComputers = function (val) {
 			return AdComputer.find({
@@ -63,7 +80,9 @@
 			})
 		};
 
-		//-------------------
+		//----------------------
+		// Build computerList
+
 		$scope.getComputersByFilter = function (filter, properties) {
 			$scope.computerList = [];
 			AdComputer.find({
@@ -73,6 +92,7 @@
 			.$promise
 			.then(
 				function (list) {
+					$scope.computerList = [];
 					//var i = 0;
 					list.forEach(function (obj) {
 						//console.log(i++, obj.Name);
@@ -84,12 +104,6 @@
 							updatesPending: false
 						});
 					})
-
-
-					pingList(function (obj) {
-						getUpdateCount(obj);
-					});
-
 				},
 				function (err) {
 					console.log(err);
@@ -109,14 +123,6 @@
 		}
 
 		// ----------------
-
-		var pingList = function (cbEach) {
-			$scope.computerList.forEach(function (obj) {
-				$scope.ping(obj, function (online) {
-					if (obj.online && cbEach) cbEach(obj);
-				});
-			});
-		}
 
 		$scope.ping = function (obj, cb) {
 			obj.onlinePending = true;

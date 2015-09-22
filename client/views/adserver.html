@@ -1,11 +1,13 @@
 <div ng-class="objSelected.computer.Name ? 'container-fluid' : 'container'">
 <h1>AD-Server</h1>
 
-<!--
-<div class="row" ng-init="getComputersByFilter('{operatingsystemversion -notlike \'6.1*\' -and operatingsystemversion -notlike \'5.1*\' }', 'operatingsystem,IPv4Address')">
--->
-<div class="row" ng-init="getComputersByFilter('{operatingsystem -like \'*server*\' }', 'operatingsystem,IPv4Address')">
+<div class="row" ng-init="getList()">
 	<div class="col-md-5" >
+	<div class="input-group">
+		<span class="input-group-addon">Filter:</span>
+		<input type="text" class="form-control" ng-model="listFilter" ng-change="getList(listFilter)" >
+		<span class="input-group-btn"><button class="btn btn-default" type="button" ng-click="checkList()">Check</button></span>
+	</div>
 	<div style="max-height: 800px;overflow: auto">
 		<ul class="list-group">
 			<li class="list-group-item" ng-repeat="obj in (computerList | orderBy : 'computer.Name')" ng-click="selectComputer(obj)" ng-class="{'list-group-item-info' : obj.computer.Name == objSelected.computer.Name}">
@@ -73,9 +75,10 @@
 		</div>
 
 		<!-- DNS -->
-		<div class="panel panel-info toggle" ng-show="objSelected.computer.Name && !objSelected.dnsPending">
+		<div class="panel panel-info toggle" ng-show="objSelected.computer.Name">
 			<div class="panel-heading">
 				<strong>DNS</strong>
+				<span class="pull-right" ng-show="objSelected.dnsPending"><i class="fa fa-spinner fa-spin fa-lg"></i><small> nslookup {{objSelected.computer.DNSHostName}}...</small></span>
 			</div>
 			<table class="table">
 				<tr ng-repeat="entry in objSelected.dns">
@@ -92,7 +95,7 @@
 		</div>
 
 		<!-- Ping -->
-		<div class="panel panel-default toggle" ng-show="objSelected.computer.Name && !objSelected.dnsPending">
+		<div class="panel panel-default toggle" ng-show="objSelected.computer.Name">
 			<div class="panel-body">
 				<div class="pull-left text-info" ng-show="objSelected.onlinePending">
 					<i class="fa fa-spinner fa-spin fa-lg"></i> Pinging {{objSelected.computer.DNSHostName}}...
