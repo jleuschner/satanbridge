@@ -6,7 +6,7 @@ module.exports = function (AdUser) {
 		baseDN: 'DC=kl,DC=kdo,DC=int',
 		//baseDN: 'OU=Klinikum,DC=kl,DC=kdo,DC=int',
 		username: 'administrator@kl.kdo.int',
-		password: '10kdo!KL'  // Credentials für AD-Lesezugriff
+		password: ''  // Credentials für AD-Lesezugriff
 		/*
 		,attributes: {
 		user: ['dn', 'userPrincipalName', 'DisplayName', 'extensionAttribute6']
