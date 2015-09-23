@@ -1,6 +1,6 @@
 var mainApp = angular.module('mainApp', [
 			'ngRoute','lbServices', 'ui.bootstrap', 'ngAnimate', 'angular-loading-bar', 
-			'win7mig', 'adlogins','sysUser', 'printqueues', 'pcmgmt', 'aduser', 'adcomputer', 'tiles'
+			'win7mig', 'adlogins','sysUser', 'printqueues', 'pcmgmt', 'aduser', 'adcomputer', 'userpasswd', 'tiles'
 			]);
 
 
@@ -9,6 +9,10 @@ mainApp.config(function ($routeProvider, $locationProvider, $httpProvider) {
 		.when('/', {
 			templateUrl: 'views/home.html'
 			//controller: 'mainCtrl'
+		})
+		.when('/userpasswd', {
+			templateUrl: 'views/userpasswd.html',
+			controller: 'userpasswdCtrl'
 		})
 		.when('/tiles', {
 			templateUrl: 'views/tiles.html',

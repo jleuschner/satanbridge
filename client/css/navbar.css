@@ -16,6 +16,25 @@ body {
 }
 
 
+div.bannerKlinikumDo {
+	background-image:url('/images/klinikumdo.jpg');
+	background-color: #84c551;
+	padding:0px;
+	padding-left:5px;
+	margin-bottom:0px;
+	margin-top:5px;
+	border:0;
+	height : 38px;
+	min-width:600px;
+	background-repeat:no-repeat;
+	font-weight:bold;
+	color:#ccc;
+	font-size:18px;
+	line-height:36px;
+
+}
+
+
 /* Fixes for maverix.css */
 .btn-primaryX {
 	background: -ms-linear-gradient(#D3F7FD, #87C5FB); /*IE10*/

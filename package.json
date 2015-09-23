@@ -6,6 +6,7 @@
     "pretest": "jshint ."
   },
   "dependencies": {
+    "activedirectory": "^0.7.0",
     "compression": "^1.0.3",
     "cors": "^2.5.2",
     "debug": "^2.2.0",

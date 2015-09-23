@@ -10097,6 +10097,160 @@ module.factory(
 
         /**
          * @ngdoc method
+         * @name lbServices.ADUser#findById
+         * @methodOf lbServices.ADUser
+         *
+         * @description
+         *
+         * <em>
+         * (The remote method definition does not provide any description.)
+         * </em>
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `Id` – `{string}` - 
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `ADUser` object.)
+         * </em>
+         */
+        "findById": {
+          url: urlBase + "/ADUsers/:Id",
+          method: "GET"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.ADUser#authenticate
+         * @methodOf lbServices.ADUser
+         *
+         * @description
+         *
+         * <em>
+         * (The remote method definition does not provide any description.)
+         * </em>
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `Id` – `{string}` - 
+         *
+         * @param {Object} postData Request data.
+         *
+         *  - `password` – `{string}` - 
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `ADUser` object.)
+         * </em>
+         */
+        "authenticate": {
+          url: urlBase + "/ADUsers/:Id/authenticate/",
+          method: "POST"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.ADUser#passwd
+         * @methodOf lbServices.ADUser
+         *
+         * @description
+         *
+         * <em>
+         * (The remote method definition does not provide any description.)
+         * </em>
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `Id` – `{string}` - 
+         *
+         * @param {Object} postData Request data.
+         *
+         *  - `OldPassword` – `{string}` - 
+         *
+         *  - `NewPassword` – `{string}` - 
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `ADUser` object.)
+         * </em>
+         */
+        "passwd": {
+          url: urlBase + "/ADUsers/:Id/passwd",
+          method: "POST"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.ADUser#setpasswd
+         * @methodOf lbServices.ADUser
+         *
+         * @description
+         *
+         * <em>
+         * (The remote method definition does not provide any description.)
+         * </em>
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `Id` – `{string}` - 
+         *
+         * @param {Object} postData Request data.
+         *
+         *  - `NewPassword` – `{string}` - 
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `ADUser` object.)
+         * </em>
+         */
+        "setpasswd": {
+          url: urlBase + "/ADUsers/:Id/setpasswd",
+          method: "POST"
+        },
+
+        /**
+         * @ngdoc method
          * @name lbServices.ADUser#find
          * @methodOf lbServices.ADUser
          *

@@ -1,0 +1,26 @@
+<div class="container">
+
+<div class="bannerKlinikumDo"></div>
+<div class="row">
+	<div class="col-md-4">
+		<br>
+		{{msg}}
+		<br>
+
+		<form>
+		<div class="form-group" ng-class="{'has-error' : userNotFound}">
+			<label class="control-label">Benutzerkennung</label>
+			<input type="text" class="form-control" ng-model="username" placeholder="Benutzerkennung">
+			<span class="help-block text-danger toggle" ng-show="userNotFound">Benutzerkennung nicht vorhanden!</span>
+		</div>
+		<div class="form-group">
+			<label>Passwort</label>
+			<input type="password" class="form-control" ng-model="password" placeholder="Passwort">
+		</div>
+		<button type="submit" class="btn btn-primary" ng-click="authenticate()">Login</button>
+		</form>
+
+	</div>
+</div>
+
+</div>
