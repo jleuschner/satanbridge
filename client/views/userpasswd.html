@@ -1,25 +1,140 @@
 <div class="container">
 
-<div class="bannerKlinikumDo"></div>
+<div class="bannerKlinikumDo"><span class="pull-right">Benutzercenter</span></div>
+<p></p>
 <div class="row">
-	<div class="col-md-4">
-		<br>
-		{{msg}}
-		<br>
+	<div class="col-md-12">
+		<tabset justified="true">
+    <tab heading="Benutzerinfo / Kennwort ändern">
+		<div class="tab-frame">
+		<div class="row">
+			<div class="col-md-4">
 
-		<form>
-		<div class="form-group" ng-class="{'has-error' : userNotFound}">
-			<label class="control-label">Benutzerkennung</label>
-			<input type="text" class="form-control" ng-model="username" placeholder="Benutzerkennung">
-			<span class="help-block text-danger toggle" ng-show="userNotFound">Benutzerkennung nicht vorhanden!</span>
-		</div>
-		<div class="form-group">
-			<label>Passwort</label>
-			<input type="password" class="form-control" ng-model="password" placeholder="Passwort">
-		</div>
-		<button type="submit" class="btn btn-primary" ng-click="authenticate()">Login</button>
-		</form>
+				<div  class="panel panel-info">
+					<div class="panel-heading"><strong>Anmeldung</strong></div>
+					<div class="panel-body">
+						<form name="frmLogin">
+						<div class="form-group" ng-class="{'has-error' : udata.notFound, 'has-warning' : !frmLogin.username.$valid }">
+							<label class="control-label">Benutzerkennung</label>
+							<input id="username" name="username" type="text" class="form-control" ng-model="udata.username" ng-disabled="user.isAuthenticated" required ="true" placeholder="Benutzerkennung" autofocus>
+							<span class="help-block text-danger toggle" ng-show="udata.notFound">Benutzerkennung nicht vorhanden!</span>
+						</div>
+						<div ng-show="!user.isAuthenticated">
+							<div class="form-group" ng-class="{'has-error' : (user.dn && !user.isAuthenticated), 'has-warning' : !frmLogin.password.$valid }">
+								<label class="control-label">Kennwort</label>
+								<input name="password" type="password" class="form-control" ng-model="udata.password" required="true" ng-minlength="8" placeholder="Kennwort">
+							</div>
+							<button type="submit" class="btn btn-primary pull-right" 
+								ng-click="authenticate(udata.username,udata.password)" 
+								ng-disabled="!(frmLogin.username.$valid && frmLogin.password.$valid)">
+								Anmelden
+							</button>
+						</div>
+						<div ng-show="user.isAuthenticated">
+							<button type="button" class="btn btn-default pull-right" 
+								ng-click="init()">
+								Abmelden
+							</button>
+						</div>
+						</form>
+					</div>
+				</div>
 
+				<div  class="panel" ng-show="user.isAuthenticated" ng-class="udata.passwdErr ? 'panel-danger' : 'panel-info'">
+					<div class="panel-heading"><strong>Kennwortänderung</strong></div>
+					<div class="panel-body">
+						<p ng-show="udata.passwdPending"><i class="fa fa-spinner fa-spin fa-lg"></i> Prüfe...</p>
+						<p class="text-danger" ng-show="udata.passwdErr"><i class="fa fa-warning fa-lg"></i> {{udata.passwdMsg}}</p>
+						<p class="text-success" ng-show="!udata.passwdErr && udata.passwdMsg"><i class="fa fa-check fa-lg"></i> {{udata.passwdMsg}}</p>
+						<form name="frmPasswd">
+							<div class="form-group" ng-class="{'has-warning' : !frmPasswd.newPassword1.$valid }">
+								<label class="control-label">Neues Kennwort</label>
+								<input name="newPassword1" type="password" class="form-control" ng-model="udata.newPassword1" 
+									ng-minlength="8" placeholder="neues Kennwort" 
+									ng-pattern="/^(?:(?=.*[a-z])(?:(?=.*[A-Z])(?=.*[\d\W])|(?=.*\W)(?=.*\d))|(?=.*\W)(?=.*[A-Z])(?=.*\d)).{8,}$/" 
+									>
+								<span class="help-block text-warning toggle" ng-show="!frmPasswd.newPassword1.$valid">Kennwort enspricht nicht den Richtlinien</span>
+
+							</div>
+							<div class="form-group" ng-class="{'has-warning' : !frmPasswd.newPassword2.$valid }">
+								<label class="control-label">Kennwortwiederholung</label>
+								<input name="newPassword2" type="password" class="form-control" ng-model="udata.newPassword2" ng-minlength="8" placeholder="neues Kennwort">
+								<span class="help-block text-danger toggle" ng-show="!frmPasswd.$valid || frmPasswd.newPassword1.$viewValue!=frmPasswd.newPassword2.$viewValue">Kennwörter stimmen nicht überein!</span>
+							</div>
+
+							<button type="submit" class="btn btn-default pull-right" 
+								ng-click="passwd(udata.username,udata.password,udata.newPassword1)" 
+								ng-disabled="(!frmPasswd.$valid) || !frmPasswd.newPassword1.$viewValue || frmPasswd.newPassword1.$viewValue!=frmPasswd.newPassword2.$viewValue">
+								Kennwort ändern
+							</button>
+						</form>
+					</div>
+				</div>
+
+
+
+			</div>
+			<div class="col-md-8" >
+				<div  class="panel panel-info" ng-show="!user.dn">
+					<div class="panel-heading"><strong>Benutzerinformation</strong></div>
+					<div class="panel-body">
+						<p>Hier können Sie überprüfen, welche Daten über Sie zentral im Active-Directory des Klinikum Dortmund gespeichert sind und Ihr Kennwort ändern.</p>
+						<p>Bitte melden Sie sich zunächst mit Ihrer Benutzerkennung und Ihrem aktuellen Kennwort an.</p>
+					</div
+					</div>
+				</div> 
+				<div class="panel slide-left" ng-show="user.dn" ng-class="{'panel-danger' : (!user.enabled || !user.isAuthenticated), 'panel-success' : user.isAuthenticated}">
+					<div class="panel-heading"><strong>Benutzerinformation</strong></div>
+					<div class="panel-body">
+						<div ng-if="!user.enabled">
+							<p>Die Benutzerkennung <strong><em>{{user.sAMAccountName}}</em></strong> ist gesperrt!</p>
+							<p>Bitte wenden Sie sich an den Benutzersupport unter 953-20922.</p>
+						</div>
+						<div ng-if="!user.isAuthenticated">
+							<p>Das eingegebene Password für die Benutzerkennung <strong><em>{{user.sAMAccountName}}</em></strong> ist nicht korrekt!</p>
+						</div>
+						<div ng-if="user.isAuthenticated">
+							<p>Herzlich Willkommen, {{user.givenName}} {{user.sn}}!</p>
+							<table class="table table-condensed">
+								<tr><th>Benutzerkennung</th><td>{{user.sAMAccountName}}</td></tr>
+								<tr><th>Name</th><td>{{user.displayName}}</td></tr>
+								<tr><th>Abteilung</th><td>{{user.department}}</td></tr>
+								<tr><th>Funktion</th><td>{{user.title}}</td></tr>
+								<tr><th>E-Mail</th><td>{{user.mail}}</td></tr>
+								<tr><th>Telefon</th><td>{{user.telephoneNumber}}</td></tr>
+								<tr><th>Telefax</th><td>{{user.facsimileTelephoneNumber}}</td></tr>
+							</table>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+		</div>
+		</tab>
+    <tab heading="Kennwort-Richtlinien">
+			<div class="tab-frame">
+			<h4>Richtlinien zur Kennwortwahl</h4>
+			<p>Ein gültiges Kennwort muss folgenden Kriterien erfüllen:</p>
+			<ul>
+				<li>mindestens acht Zeichen lang </li>
+				<li>mindestens drei der folgenden Zeichenarten müssen enthalten sein:</li>
+				<ul>
+				<li>Kleinbuchstaben  abc...</li>
+				<li>Großbuchstaben  ABC...</li>
+				<li>Ziffern  123...</li>
+				<li>Sonderzeichen  !§$%&@...</li>
+				</ul>
+				<li>darf keine Teile Ihrer Benutzerkennung (K-Nummer) oder Ihres Namens enthalten</li>
+				<li>Das System merkt sich die letzen vier Kennworte, sie dürfen nicht noch einmal verwendet werden</li>
+		</ul>
+		<p>Das Kennwort sollte alle 30 Tage, muss alle 90 Tage gewechselt werden.</p>
+		</div>
+		</tab>
+	<!--
+		<tab heading="Antrag">Formular für Benutzerantrag</tab>
+-->
+		</tabset>
 	</div>
 </div>
 

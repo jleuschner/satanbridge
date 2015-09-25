@@ -1,19 +1,8 @@
 module.exports = function (AdUser) {
 	var PSCommand = require('../../modules/pscommand');
 	var ActiveDirectory = require('activedirectory');
-	var ADConfig = {
-		url: 'ldap://dckdo01.kl.kdo.int',
-		baseDN: 'DC=kl,DC=kdo,DC=int',
-		//baseDN: 'OU=Klinikum,DC=kl,DC=kdo,DC=int',
-		username: 'administrator@kl.kdo.int',
-		password: ''  // Credentials für AD-Lesezugriff
-		/*
-		,attributes: {
-		user: ['dn', 'userPrincipalName', 'DisplayName', 'extensionAttribute6']
-		}
-		*/
-	}
-	var AD = new ActiveDirectory(ADConfig);
+	var siteconfig = require('../../siteconfig');
+	var AD = new ActiveDirectory(siteconfig.activedirectory);
 
 	// /:Id   findByID
 	AdUser.findById = function (Id, cb) {
@@ -27,6 +16,8 @@ module.exports = function (AdUser) {
 					cb(null, {});
 				}
 				else {
+					users.enabled = (users.userAccountControl & 2) != 2;
+					//users.passwdAllowed = (users.userAccountControl & 64) != 64;
 					cb(null, users);
 				}
 			}
@@ -47,18 +38,18 @@ module.exports = function (AdUser) {
 			if (user.userPrincipalName) {
 				AD.authenticate(user.userPrincipalName, password, function (err, auth) {
 					if (err) {
-						cb(null, { user: user, auth: false });
+						cb(null, { user: user, isAuthenticated: false });
 						return;
 					}
 					if (auth) {
-						cb(err, { user: user, auth: true });
+						cb(err, { user: user, isAuthenticated: true });
 					}
 					else {
-						cb(err, { user: user, auth: false });
+						cb(err, { user: user, isAuthenticated: false });
 					}
 				})
 			} else {
-				cb(null, { user: false, auth: false })
+				cb(null, { user: false, isAuthenticated: false })
 			}
 		})
 	};
@@ -99,7 +90,7 @@ module.exports = function (AdUser) {
 				},
 					function (error, result) {
 						var out = {
-							user: user.userPrincipalName,
+							user: user,
 							passwd: true
 						}
 						if (result.stderr) {
@@ -119,7 +110,7 @@ module.exports = function (AdUser) {
 			http: { path: '/:Id/passwd', verb: 'post' },
 			accepts: [
 				{ arg: 'Id', type: 'string', http: { source: 'path' }, required: true },
-				{ arg: 'OldPassword', type: 'string', required: true},
+				{ arg: 'OldPassword', type: 'string', required: true },
 				{ arg: 'NewPassword', type: 'string', required: true}],
 			returns: { type: 'object', root: true }
 		}
