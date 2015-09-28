@@ -8,7 +8,7 @@ module.exports.activedirectory= {
 				'dn', 'userPrincipalName','sAMAccountName', 
 				'displayName', 'givenName', 'sn',
 				'department','title','mail', 'telephoneNumber', 'facsimileTelephoneNumber',
-				'userAccountControl',
+				'userAccountControl', 'pwdLastSet',
 				'extensionAttribute6'
 				]
 		}

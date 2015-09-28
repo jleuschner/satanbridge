@@ -21,6 +21,12 @@
 						$scope.udata.notFound = true;
 					} else {
 						$scope.user = auth.user;
+						//var lastSet = new Date( (($scope.user.pwdLastSet / 10000000 - 11644473600) >>0) *1000);
+						var lastSet = (($scope.user.pwdLastSet / 10000000 - 11644473600) >>0) *1000;
+						$scope.user.passwordLastSet = lastSet;
+						$scope.user.passwordExpires = lastSet+86400*1000*90;
+						$scope.user.passwordNotExpires = ($scope.user.userAccountControl & 65536) == 65536;
+						
 						if (auth.isAuthenticated) $scope.user.isAuthenticated = true;
 					}
 				})

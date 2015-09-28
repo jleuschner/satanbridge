@@ -173,18 +173,17 @@ module.exports = function (AdUser) {
 
 
 	AdUser.find = function (filter, prop, cb) {
-		console.log(cb);
 		AD.findUsers(filter, true, function (err, users) {
 			if (err) {
 				console.log('ERROR: ' + JSON.stringify(err));
 				cb(err, null);
 			} else {
 				if ((!users) || (users.length == 0)) {
-					console.log('No users found.');
+					//console.log('No users found.');
 					cb(null, []);
 				}
 				else {
-					console.log(users);
+					//console.log(users);
 					cb(null, users);
 				}
 			}

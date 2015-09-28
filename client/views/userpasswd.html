@@ -90,11 +90,13 @@
 							<p>Die Benutzerkennung <strong><em>{{user.sAMAccountName}}</em></strong> ist gesperrt!</p>
 							<p>Bitte wenden Sie sich an den Benutzersupport unter 953-20922.</p>
 						</div>
-						<div ng-if="!user.isAuthenticated">
+						<div ng-if="user.enabled && !user.isAuthenticated">
 							<p>Das eingegebene Password für die Benutzerkennung <strong><em>{{user.sAMAccountName}}</em></strong> ist nicht korrekt!</p>
 						</div>
 						<div ng-if="user.isAuthenticated">
 							<p>Herzlich Willkommen, {{user.givenName}} {{user.sn}}!</p>
+							<p ng-if="!user.passwordNotExpires">Ihr Kennwort wurde zuletzt am {{user.passwordLastSet | date:"dd.MM.yyyy" }} gesetzt und ist bis <strong>{{user.passwordExpires | date:"dd.MM.yyyy HH:mm:ss" }}</strong> gültig.</p>
+							<p ng-if="user.passwordNotExpires">Ihr Kennwort wurde zuletzt am {{user.passwordLastSet | date:"dd.MM.yyyy" }} gesetzt und hat kein Verfallsdatum.</p>
 							<table class="table table-condensed">
 								<tr><th>Benutzerkennung</th><td>{{user.sAMAccountName}}</td></tr>
 								<tr><th>Name</th><td>{{user.displayName}}</td></tr>
@@ -103,6 +105,10 @@
 								<tr><th>E-Mail</th><td>{{user.mail}}</td></tr>
 								<tr><th>Telefon</th><td>{{user.telephoneNumber}}</td></tr>
 								<tr><th>Telefax</th><td>{{user.facsimileTelephoneNumber}}</td></tr>
+								<!--
+								<tr><th>passwordNotExpires</th><td>{{user.passwordNotExpires}}</td></tr>
+								<tr><th>userAccountControl</th><td>{{user.userAccountControl}}</td></tr>
+								-->
 							</table>
 						</div>
 
@@ -114,7 +120,7 @@
 		</tab>
     <tab heading="Kennwort-Richtlinien">
 			<div class="tab-frame">
-			<h4>Richtlinien zur Kennwortwahl</h4>
+			<h3>Richtlinien zur Kennwortwahl</h3>
 			<p>Ein gültiges Kennwort muss folgenden Kriterien erfüllen:</p>
 			<ul>
 				<li>mindestens acht Zeichen lang </li>
