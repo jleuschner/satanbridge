@@ -15,7 +15,7 @@ exports.status = function () {
     	}, function (error, response, body) {
     		if (error) {
     			var out = {}
-    			//console.log("MODUL-ERR");
+    			console.log("ERROR: Powershell-Call", command);
     			cb(error, "{}");
     		} else {
     			//console.log("CALLBACK NoERR");

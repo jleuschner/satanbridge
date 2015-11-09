@@ -84,5 +84,9 @@
   "ADComputer": {
     "dataSource": null,
     "public": true
+  },
+  "AdrStructure": {
+    "dataSource": "thorin",
+    "public": true
   }
 }

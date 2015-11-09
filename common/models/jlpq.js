@@ -1,9 +1,10 @@
-var edge = require('edge');
-var printer = edge.func('ps', function () {/*
-"$(Get-printer -computername print | sort name | convertto-json)"
-*/});
 
+//var edge = require('edge');
+//var printer = edge.func('ps', function () {/*
+//"$(Get-printer -computername print | sort name | convertto-json)"
+//*/});
 
+/*
 module.exports = function (Jlpq) {
 	Jlpq.getQueues = function (cb) {
 		printer({}, function (error, result) {
@@ -29,3 +30,4 @@ module.exports = function (Jlpq) {
 	)
 
 };
+*/

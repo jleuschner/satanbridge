@@ -10,9 +10,13 @@ mainApp.config(function ($routeProvider, $locationProvider, $httpProvider) {
 			templateUrl: 'views/home.html'
 			//controller: 'mainCtrl'
 		})
-		.when('/userpasswd', {
+		.when('/userpass', {
 			templateUrl: 'views/userpasswd.html',
 			controller: 'userpasswdCtrl'
+		})
+		.when('/user', {
+			templateUrl: 'views/user.html',
+			controller: 'aduserCtrl'
 		})
 		.when('/tiles', {
 			templateUrl: 'views/tiles.html',

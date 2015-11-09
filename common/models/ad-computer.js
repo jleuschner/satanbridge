@@ -50,6 +50,25 @@ module.exports = function (AdComputer) {
     );
 	// ----------------- ENDE findById --------------
 
+	// ----------------- software ------------------
+	AdComputer.software = function (Id, cb) {
+		PSCommand.execute("getSmsSoftware", { "computername": Id },
+					function (error, result) {
+						//out = { software: result };
+						cb(error, result.output);
+					});
+	};
+
+	AdComputer.remoteMethod(
+        'software',
+        {
+        	http: { path: '/:id/software/', verb: 'get' },
+        	accepts: [{ arg: 'id', type: 'string', http: { source: 'path' }, required: true}],
+        	returns: { type: 'array', root: true }
+        }
+    );
+	// ----------------- ENDE software --------------
+
 	// ----------------- ping ------------------
 	AdComputer.ping = function (Id, cb) {
 		PSCommand.execute("TestConnection", { "computername": Id },

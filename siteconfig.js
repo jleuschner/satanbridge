@@ -5,11 +5,11 @@ module.exports.activedirectory= {
 		password: 'teLeF0n3',  
 		attributes: {
 			user: [
-				'dn', 'userPrincipalName','sAMAccountName', 
+				'dn', 'userPrincipalName','sAMAccountName', 'objectClass',
 				'displayName', 'givenName', 'sn',
 				'department','title','mail', 'telephoneNumber', 'facsimileTelephoneNumber',
 				'userAccountControl', 'pwdLastSet',
-				'extensionAttribute6'
+				'extensionAttribute1', 'extensionAttribute2', 'extensionAttribute6'
 				]
 		}
 }

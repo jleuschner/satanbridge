@@ -168,12 +168,26 @@ module.exports = function (AdUser) {
 	);
 
 
-
+	function ldap2ps(user) {
+		// LDAP-Felder in Powershell Namenskonventionen
+		console.log(user);
+		var ret = {};
+		ret.Enabled = (user.userAccountControl & 2) != 2;
+		ret.DistinguishedName = user.dn;
+		ret.Name = user.displayName ? user.displayName : "";
+		ret.SamAccountName = user.sAMAccountName ? user.sAMAccountName : "";
+		ret.department = user.department ? user.department : "";
+		ret.extensionAttribute1 = user.extensionAttribute1 ? user.extensionAttribute1 : "";
+		ret.extensionAttribute2 = user.extensionAttribute2 ? user.extensionAttribute2 : "";
+		ret.ObjectClass = user.objectClass.indexOf('user') < 0 ? 'contact' : 'user';
+		return ret;
+	}
 
 
 
 	AdUser.find = function (filter, prop, cb) {
-		AD.findUsers(filter, true, function (err, users) {
+		if (filter.indexOf("=") < 1) filter = "name=" + filter;
+		AD.findUsers(filter, false, function (err, users) {
 			if (err) {
 				console.log('ERROR: ' + JSON.stringify(err));
 				cb(err, null);
@@ -183,8 +197,11 @@ module.exports = function (AdUser) {
 					cb(null, []);
 				}
 				else {
-					//console.log(users);
-					cb(null, users);
+					var out = [];
+					users.forEach(function (obj) {
+						out.push(ldap2ps(obj));
+					})
+					cb(null, out);
 				}
 			}
 		});
@@ -200,6 +217,43 @@ module.exports = function (AdUser) {
         }
     );
 
+
+
+	AdUser.departments = function (filter, prop, cb) {
+		filter = "name=*";
+		AD.findUsers(filter, false, function (err, users) {
+			if (err) {
+				console.log('ERROR: ' + JSON.stringify(err));
+				cb(err, null);
+			} else {
+				if ((!users) || (users.length == 0)) {
+					//console.log('No users found.');
+					cb(null, []);
+				}
+				else {
+					var out = [];
+					users.forEach(function (obj) {
+						//if (obj.department == null) console.log("NULL: ", obj.displayName);
+						if ((obj.userAccountControl & 2) == 2) return;
+						if (out.indexOf(obj.department) < 0) {
+							out.push(obj.department);
+						}
+					})
+					cb(null, out);
+				}
+			}
+		});
+	};
+
+	AdUser.remoteMethod(
+        'departments',
+        {
+        	http: { path: '/departments', verb: 'get' },
+        	accepts: [{ arg: 'filter', type: 'string', required: false },
+										{ arg: 'properties', type: 'string'}],
+        	returns: { type: 'array', root: true }
+        }
+    );
 
 	/* 
 	//	---- find by Powershell-RESTAPI ----------

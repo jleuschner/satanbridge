@@ -1,0 +1,8 @@
+<li class="list-group-item">
+	<i class="fa" ng-if="obj.ObjectClass=='user'" ng-class="{'fa-user text-success' : obj.Enabled, 'fa-user-times text-danger' : !obj.Enabled}"></i>
+	<i class="fa fa-envelope-o" ng-if="obj.ObjectClass=='contact'"></i>
+	{{obj.SamAccountName}} : {{obj.Name}}
+	<p>Department: {{obj.department}}</p>
+	<p>User-Mgr: {{obj.extensionAttribute1}}</p>
+	<p><small>{{obj.DistinguishedName}}</small></p>
+</li>

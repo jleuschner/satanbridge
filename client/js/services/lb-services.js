@@ -10286,6 +10286,44 @@ module.factory(
           url: urlBase + "/ADUsers",
           method: "GET"
         },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.ADUser#departments
+         * @methodOf lbServices.ADUser
+         *
+         * @description
+         *
+         * <em>
+         * (The remote method definition does not provide any description.)
+         * </em>
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `filter` – `{string=}` - 
+         *
+         *  - `properties` – `{string=}` - 
+         *
+         * @param {function(Array.<Object>,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Array.<Object>} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `ADUser` object.)
+         * </em>
+         */
+        "departments": {
+          isArray: true,
+          url: urlBase + "/ADUsers/departments",
+          method: "GET"
+        },
       }
     );
 

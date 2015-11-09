@@ -1,0 +1,53 @@
+<div ng-class="objSelected.computer.Name ? 'container-fluid' : 'container'">
+<h1>AD-User</h1>
+
+<div class="row" >
+	<tabset justified="true">
+
+  <tab heading="Suche">
+	<div class="tab-frame">
+	<div class="row">
+		<div class="col-md-6" >
+			<form>
+			<div class="input-group">
+				<span class="input-group-addon">Filter:</span>
+				<input type="text" class="form-control" ng-model="listFilter">
+				<span class="input-group-btn"><button type="submit" class="btn btn-default" type="button" ng-click="getList(listFilter)">Suche</button></span>
+			</div>
+			</form>
+			<p>Gefundene Objekte: {{userList.length}}</p>
+			<div style="max-height: 800px;overflow: auto">
+				<ul class="list-group">
+					<user ng-repeat="obj in userList | filter: obj.Enabled"></user>
+				</ul>
+			</div>
+		</div>
+	</div>
+	</div>
+	</tab>
+
+
+
+  <tab heading="Departments" select="getDepartments()">
+	<div class="tab-frame">
+	<div class="row">
+		<div class="col-md-4" style="max-height: 600px;overflow: auto">
+				<ul class="list-group">
+					<li class="list-group-item" ng-repeat="obj in departmentList | orderBy: obj"  ng-click="selectDepartment(obj)">
+						{{obj}}
+					</li>
+				</ul>
+		</div>
+
+		<div class="col-md-8" style="max-height: 600px;overflow: auto">
+				<ul class="list-group">
+					<user ng-repeat="obj in departmentUserList | filter: obj.Enabled"></user>
+				</ul>
+		</div>
+	</div>
+	</div>
+	</tab>
+
+	</tabset>
+</div>
+</div>
